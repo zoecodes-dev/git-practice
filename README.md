@@ -16,3 +16,6 @@ branch !는?
 pr 은 pull- request!
 
 merch는 병합
+
+
+은진님 굿모닝~~ selamat siang
