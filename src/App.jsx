@@ -13,7 +13,16 @@ const sections = [
         { label: "Repository (.git)", desc: "스냅샷이 영구 저장되는 공간", color: "#60A5FA", icon: "🗄️" },
       ],
       flow: "수정 → git add → git commit",
-    }],
+    },
+    {
+    type: "tip",
+    title: "🫁 Git 쓸 때 숨쉬듯 해야 하는 것",
+    items: [
+      { label: "git status", desc: "브랜치 이동 전, 커밋 전, 뭔가 이상할 때 — 항상 먼저. 습관이 안 되면 나중에 꼭 사고 남" },
+      { label: "언제 쓰냐면", desc: "switch 하기 전 / add 하기 전 / pull 하기 전 / 뭔가 꼬인 것 같을 때" },
+      { label: "왜 중요하냐면", desc: "untracked 파일, 수정 중인 파일이 있는 채로 브랜치 이동하면 변경사항이 딸려가거나 충돌 남" },
+    ],
+  }],
   },
   {
     id: "setup", emoji: "⚙️", title: "초기 설정", subtitle: "처음 한 번만", color: "#059669",
@@ -214,6 +223,220 @@ const sections = [
         code: `# 환경변수 (API 키 절대 금지!)\n.env\n.env.local\n.env.*.local\n\n# Python\n__pycache__/\n*.py[cod]\n*.egg-info/\nvenv/\n.venv/\ndist/\n\n# IDE\n.vscode/settings.json\n.idea/\n*.swp\n\n# 모델/데이터 (용량 큰 것)\n*.pkl\n*.h5\ndata/raw/\nchroma_db/\n\n# OS\n.DS_Store\nThumbs.db` },
     ],
   },
+  {
+    id: "divider-1",
+    type: "divider",
+    label: "실전 상황",
+  },
+  {
+    id: "pr-review",
+    emoji: "🔍",
+    title: "PR 리뷰",
+    subtitle: "팀원 코드 로컬에서 보기",
+    color: "#0891B2",
+    content: [
+      {
+        type: "flow",
+        title: "PR 코드를 내 로컬에서 확인하는 법",
+        steps: [
+          { step: "1", action: "git fetch origin", desc: "원격 브랜치 목록 새로고침. pull과 달리 내 파일은 건드리지 않는 안전한 명령어", icon: "📡" },
+          { step: "2", action: "git switch feature/jihye", desc: "확인할 PR의 브랜치로 이동. fetch 해뒀으니 로컬에 없어도 자동으로 연결됨", icon: "🌿" },
+          { step: "3", action: "npm install", desc: ".gitignore에 있는 node_modules는 저장소에 없음 → 브랜치 바꿀 때마다 의존성이 다를 수 있으니 다시 설치", icon: "📦" },
+          { step: "4", action: "npm run dev", desc: "로컬 서버 띄워서 직접 테스트. 여기서 수정해도 팀원 원본에는 영향 없음", icon: "🖥️" },
+          { step: "5", action: "git restore .", desc: "테스트 중 수정한 게 있으면 초기화 먼저. 안 하면 브랜치 이동 시 변경사항 딸려감", icon: "🧹" },
+          { step: "6", action: "git switch feature/eunjin", desc: "리뷰 끝났으면 내 브랜치로 복귀", icon: "🏠" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "💡 GitHub CLI 쓰면 더 편함",
+        items: [
+          { label: "gh pr checkout 12", desc: "PR 번호만으로 바로 체크아웃. 브랜치 이름 복사할 필요 없음" },
+          { label: "설치", desc: "brew install gh (Mac) / winget install GitHub.cli (Windows)" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "⚠️ 여기서 자주 막힘",
+        items: [
+          { label: "switch 전 status 확인", desc: "수정사항 있는 채로 이동하면 변경사항이 딸려가거나 에러 남" },
+          { label: "npm install 빠트림", desc: "브랜치마다 package.json이 다를 수 있음. 화면 깨지거나 에러 나면 먼저 의심" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "branch-cleanup",
+    emoji: "🗑️",
+    title: "브랜치 정리",
+    subtitle: "PR merge 후 뒷정리",
+    color: "#374151",
+    content: [
+      {
+        type: "flow",
+        title: "원격에서 브랜치 삭제된 후 로컬 정리",
+        steps: [
+          { step: "1", action: "git fetch --prune", desc: "원격에서 삭제된 브랜치를 로컬 목록에서도 제거. 안 하면 없는 브랜치가 계속 보임", icon: "🧹" },
+          { step: "2", action: "git switch main", desc: "main으로 이동", icon: "🏠" },
+          { step: "3", action: "git pull", desc: "merge된 최신 코드 받기", icon: "⬇️" },
+          { step: "4", action: "git branch -d feature/내브랜치", desc: "로컬 브랜치 삭제. -d는 merge된 브랜치만 삭제 (안전)", icon: "🗑️" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "⚠️ 여기서 자주 막힘",
+        items: [
+          { label: "fetch --prune 안 함", desc: "git branch -a 했을 때 사라진 원격 브랜치가 계속 보여서 혼란스러움" },
+          { label: "-d vs -D", desc: "-d는 merge 안 된 브랜치는 삭제 거부 (안전) / -D는 강제 삭제. 습관적으로 -D 쓰면 작업 날릴 수 있음" },
+          { label: "pull 빠트림", desc: "main으로 왔는데 pull 안 하면 팀원 작업이 반영 안 된 옛날 코드 상태" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "main-oops",
+    emoji: "🚨",
+    title: "main 실수 커밋",
+    subtitle: "잘못 넣은 커밋 되돌리기",
+    color: "#DC2626",
+    content: [
+      {
+        type: "concept",
+        title: "상황",
+        body: "main 브랜치에서 작업하다가 실수로 커밋해버림.\nfeature 브랜치로 커밋을 옮기고 main은 되돌려야 함.",
+        diagram: [
+          { label: "main (지금)", desc: "실수 커밋이 main에 있음", color: "#FCA5A5", icon: "😱" },
+          { label: "feature 브랜치", desc: "커밋이 여기 있어야 함", color: "#86EFAC", icon: "✅" },
+        ],
+      },
+      {
+        type: "flow",
+        title: "해결 순서",
+        steps: [
+          { step: "1", action: "git log --oneline", desc: "실수로 넣은 커밋의 hash 확인 (앞 7자리)", icon: "🔍" },
+          { step: "2", action: "git switch -c feature/새브랜치", desc: "지금 이 상태(실수 커밋 포함)에서 새 브랜치 생성. 커밋이 자동으로 따라옴", icon: "🌿" },
+          { step: "3", action: "git switch main", desc: "다시 main으로 복귀", icon: "🏠" },
+          { step: "4", action: "git reset HEAD~1", desc: "main에서 마지막 커밋 취소. 파일 내용은 유지됨 (--hard 쓰면 파일도 날아가니 주의)", icon: "⏪" },
+          { step: "5", action: "git restore .", desc: "main에 남은 변경사항 초기화", icon: "🧹" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "⚠️ 주의",
+        items: [
+          { label: "push 전에만", desc: "이미 main에 push 했으면 reset 금지. 팀원 코드 꼬임. revert 써야 함" },
+          { label: "HEAD~1 의미", desc: "마지막 1개 커밋 취소. 2개면 HEAD~2" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "rebase-update",
+    emoji: "🔄",
+    title: "브랜치 최신화",
+    subtitle: "main보다 뒤처졌을 때",
+    color: "#7C3AED",
+    content: [
+      {
+        type: "concept",
+        title: "상황",
+        body: "내가 feature 브랜치에서 작업하는 동안\n팀원들이 main에 계속 merge함.\nPR 올리기 전에 최신 main 위에 내 커밋을 올려야 함.",
+        diagram: [
+          { label: "main (최신)", desc: "팀원 커밋들이 쌓여있음", color: "#60A5FA", icon: "⬆️" },
+          { label: "내 브랜치", desc: "옛날 main 기준으로 만들어짐", color: "#FCD34D", icon: "😅" },
+        ],
+      },
+      {
+        type: "flow",
+        title: "rebase로 최신화",
+        steps: [
+          { step: "1", action: "git fetch origin", desc: "원격 main 최신 정보 가져오기", icon: "📡" },
+          { step: "2", action: "git switch feature/내브랜치", desc: "내 브랜치로 이동", icon: "🌿" },
+          { step: "3", action: "git rebase origin/main", desc: "최신 main 위에 내 커밋 재배치. 히스토리가 깔끔해짐", icon: "🔄" },
+          { step: "4", action: "충돌 해결 후 git rebase --continue", desc: "충돌 나면 파일 수정 → git add → git rebase --continue", icon: "⚡" },
+          { step: "5", action: "git push --force-with-lease", desc: "rebase 후에는 push가 rejected됨. force-with-lease로 안전하게 강제 push", icon: "⬆️" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "⚠️ 여기서 자주 막힘",
+        items: [
+          { label: "force-with-lease vs force", desc: "--force는 남의 push 덮어씀. --force-with-lease는 내가 모르는 변경사항 있으면 거부 → 더 안전" },
+          { label: "rebase 중 취소", desc: "중간에 그만하고 싶으면 git rebase --abort → 원래 상태로 복귀" },
+          { label: "공유 브랜치엔 금지", desc: "main, develop 등 팀 공유 브랜치는 rebase 절대 금지. 내 feature 브랜치에서만" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "push-rejected",
+    emoji: "❌",
+    title: "push rejected",
+    subtitle: "거부당했을 때",
+    color: "#B45309",
+    content: [
+      {
+        type: "concept",
+        title: "상황",
+        body: "git push 했더니 이런 에러가 남:",
+        code: `! [rejected] feature/eunjin -> feature/eunjin (non-fast-forward)\nerror: failed to push some refs\nhint: Updates were rejected because the tip of your current branch is behind`,
+      },
+      {
+        type: "tip",
+        title: "원인별 대처법",
+        items: [
+          { label: "내가 rebase 한 경우", desc: "git push --force-with-lease 사용. 혼자 쓰는 feature 브랜치에서만" },
+          { label: "팀원이 같은 브랜치에 push 한 경우", desc: "git fetch → git merge origin/feature/내브랜치 → 충돌 해결 → push" },
+          { label: "절대 하면 안 되는 것", desc: "git push --force (--force-with-lease 없이) → 팀원 커밋 덮어씌워서 작업 날릴 수 있음" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "⚠️ force push 전 체크리스트",
+        items: [
+          { label: "혼자 쓰는 브랜치인가?", desc: "팀원이 같이 쓰는 브랜치면 force push 금지" },
+          { label: "--force-with-lease 쓰는가?", desc: "--force는 쓰지 말 것. 항상 --force-with-lease" },
+          { label: "PR이 이미 열려있는가?", desc: "PR 있으면 팀원한테 force push 한다고 미리 알리기" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "commit-clean",
+    emoji: "✨",
+    title: "커밋 정리",
+    subtitle: "PR 전에 깔끔하게",
+    color: "#0F766E",
+    content: [
+      {
+        type: "concept",
+        title: "상황",
+        body: "작업하다 보면 커밋이 지저분하게 쌓임.\nPR 올리기 전에 의미 있는 단위로 정리하면 리뷰어가 고마워함.",
+        code: `// 정리 전 (지저분)\nwip\nwip2\nfix typo\nfix typo again\nfinally works\n\n// 정리 후 (깔끔)\nfeat(auth): add JWT login flow`,
+      },
+      {
+        type: "flow",
+        title: "rebase -i로 커밋 정리",
+        steps: [
+          { step: "1", action: "git log --oneline", desc: "몇 개 정리할지 확인", icon: "🔍" },
+          { step: "2", action: "git rebase -i HEAD~5", desc: "최근 5개 커밋 인터랙티브 편집 시작 (숫자는 상황에 맞게)", icon: "✏️" },
+          { step: "3", action: "pick → squash (s)", desc: "에디터에서 합치고 싶은 커밋을 pick에서 s로 변경. 맨 위 커밋은 pick 유지", icon: "🗜️" },
+          { step: "4", action: "커밋 메시지 편집", desc: "저장 후 최종 커밋 메시지 작성. Conventional Commits 형식으로", icon: "✍️" },
+          { step: "5", action: "git push --force-with-lease", desc: "정리 후 push. rebase했으니 force 필요", icon: "⬆️" },
+        ],
+      },
+      {
+        type: "tip",
+        title: "💡 에디터 명령어",
+        items: [
+          { label: "pick (p)", desc: "커밋 그대로 유지" },
+          { label: "squash (s)", desc: "위 커밋에 합치기 (메시지도 합침)" },
+          { label: "fixup (f)", desc: "위 커밋에 합치기 (메시지는 버림) ← 더 자주 씀" },
+          { label: "reword (r)", desc: "커밋 내용은 유지하고 메시지만 수정" },
+        ],
+      },
+    ],
+  },  
 ];
 
 // ── 스타일 상수 ──────────────────────────────────────────────
@@ -364,7 +587,7 @@ const TipBlock = ({ items }) => (
 // ── 메인 컴포넌트 ────────────────────────────────────────────
 export default function GitGuide() {
   const [active, setActive] = useState("concept");
-  const current = sections.find((s) => s.id === active);
+  const current = sections.find((s) => s.id === active && s.type !== "divider");
 
   return (
     <div style={S.page}>
@@ -381,22 +604,56 @@ export default function GitGuide() {
 
       {/* Nav */}
       <div style={S.nav}>
-        {sections.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => setActive(s.id)}
-            style={{
-              flexShrink: 0, padding: "6px 12px", borderRadius: "20px", border: "none",
-              cursor: "pointer", fontSize: "11px", fontFamily: "system-ui, sans-serif",
-              fontWeight: "500", transition: "all 0.15s",
-              background: active === s.id ? s.color : "rgba(255,255,255,0.05)",
-              color: active === s.id ? "#fff" : "#9CA3AF",
-              boxShadow: active === s.id ? `0 0 12px ${s.color}55` : "none",
-            }}
-          >
-            {s.emoji} {s.title}
-          </button>
-        ))}
+        {sections.map((s) => {
+          if (s.type === "divider") {
+            return (
+              <div
+                key={s.id}
+                style={{
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "0 4px",
+                }}
+              >
+                <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.1)" }} />
+                <span style={{
+                  fontSize: "10px",
+                  color: "#4B5563",
+                  fontFamily: "system-ui, sans-serif",
+                  whiteSpace: "nowrap",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                }}>
+                  {s.label}
+                </span>
+              </div>
+            );
+          }
+          return (
+            <button
+              key={s.id}
+              onClick={() => setActive(s.id)}
+              style={{
+                flexShrink: 0,
+                padding: "6px 12px",
+                borderRadius: "20px",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "11px",
+                fontFamily: "system-ui, sans-serif",
+                fontWeight: "500",
+                transition: "all 0.15s",
+                background: active === s.id ? s.color : "rgba(255,255,255,0.05)",
+                color: active === s.id ? "#fff" : "#9CA3AF",
+                boxShadow: active === s.id ? `0 0 12px ${s.color}55` : "none",
+              }}
+            >
+              {s.emoji} {s.title}
+            </button>
+          );
+        })}
       </div>
 
       {/* Content */}
