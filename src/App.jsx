@@ -6,9 +6,9 @@ const sections = [
     content: [{
       type: "concept",
       title: "Git = 시간여행 가능한 스냅샷 시스템",
-      body: "Git은 파일의 변경 내역을 스냅샷으로 저장하는 분산형 버전 관리 시스템이야.\n\n핵심은 3가지 공간이 있다는 것:",
+      body: "Git은 파일의 변경 내역을 스냅샷으로 저장하는 분산형 버전 관리 시스템\n\n핵심은 3가지 공간이 있다는 것:",
       diagram: [
-        { label: "Working Directory", desc: "지금 네가 편집하는 공간", color: "#FCD34D", icon: "📁" },
+        { label: "Working Directory", desc: "지금 편집하는 공간", color: "#FCD34D", icon: "📁" },
         { label: "Staging Area (Index)", desc: "커밋할 변경사항을 모아두는 공간", color: "#34D399", icon: "📋" },
         { label: "Repository (.git)", desc: "스냅샷이 영구 저장되는 공간", color: "#60A5FA", icon: "🗄️" },
       ],
@@ -138,9 +138,9 @@ const sections = [
     ],
   },
   {
-    id: "conflict", emoji: "⚡", title: "충돌 해결", subtitle: "겁먹지 마", color: "#DC2626",
+    id: "conflict", emoji: "⚡", title: "충돌 해결", subtitle: "겁먹지 마세요!", color: "#DC2626",
     content: [
-      { type: "concept", title: "충돌(Conflict)이란?", body: "같은 파일의 같은 줄을 두 명이 다르게 수정했을 때 Git이 어느 버전을 쓸지 몰라서 물어보는 것.\n\n충돌 파일 안에 이런 게 생겨:",
+      { type: "concept", title: "충돌(Conflict)이란?", body: "같은 파일의 같은 줄을 두 명이 다르게 수정했을 때 Git이 어느 버전을 쓸지 몰라서 물어보는 것.\n\n충돌 파일 안에 이런 게 생김:",
         code: `<<<<<<< HEAD (내 버전)\nresponse = agent.run(query)\n=======\nresponse = agent.execute(query, timeout=30)\n>>>>>>> feature/timeout (상대방 버전)` },
       { type: "flow", title: "충돌 해결 루틴", steps: [
         { step: "1", action: "git status", desc: "충돌 파일 확인", icon: "🔍" },
