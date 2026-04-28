@@ -1,17 +1,6 @@
-/* 1. 예쁜 폰트 먼저 무조건 맨 윗줄에서 가져오기 */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
-/* 2. 그다음 Tailwind 가져오기 */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* 3. 기본 스타일 세팅 */
 body {
-  font-family: 'JetBrains Mono', monospace;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #0a0a0f;
-  color: #e2e8f0;
   margin: 0;
+  background-color: #0a0a0f;
 }
